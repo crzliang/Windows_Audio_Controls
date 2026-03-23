@@ -5,6 +5,13 @@ package main
 
 import "fmt"
 
+const (
+	VK_MEDIA_NEXT_TRACK byte = 0xB0
+	VK_MEDIA_PREV_TRACK byte = 0xB1
+	VK_MEDIA_STOP       byte = 0xB2
+	VK_MEDIA_PLAY_PAUSE byte = 0xB3
+)
+
 type AudioSession struct {
 	PID    uint32  `json:"pid"`
 	Name   string  `json:"name"`
@@ -30,4 +37,8 @@ func getAudioSessions() ([]AudioSession, error) {
 func setAudioSessionVolume(pid uint32, level float32, mute *bool) error {
 	fmt.Printf("STUB: setAudioSessionVolume pid=%d level=%v mute=%v\n", pid, level, mute)
 	return nil
+}
+
+func sendMediaKey(key byte) {
+	fmt.Printf("STUB: sendMediaKey 0x%X\n", key)
 }

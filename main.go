@@ -49,6 +49,7 @@ func onReady() {
 		http.HandleFunc("/api/status", handleStatus)
 		http.HandleFunc("/api/master/volume", handleMasterVolume)
 		http.HandleFunc("/api/sessions/volume", handleSessionVolume)
+		http.HandleFunc("/api/media", handleMediaControl)
 
 		// Serve Static Files
 		webFS, err := fs.Sub(embeddedFiles, "web")
@@ -164,6 +165,30 @@ func handleSessionVolume(w http.ResponseWriter, r *http.Request) {
 
 	if err := setAudioSessionVolume(uint32(pid), level, mute); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func handleMediaControl(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	action := r.URL.Query().Get("action")
+	switch action {
+	case "next":
+		sendMediaKey(VK_MEDIA_NEXT_TRACK)
+	case "prev":
+		sendMediaKey(VK_MEDIA_PREV_TRACK)
+	case "play_pause":
+		sendMediaKey(VK_MEDIA_PLAY_PAUSE)
+	case "stop":
+		sendMediaKey(VK_MEDIA_STOP)
+	default:
+		http.Error(w, "Invalid action", http.StatusBadRequest)
 		return
 	}
 

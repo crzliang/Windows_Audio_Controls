@@ -14,6 +14,7 @@ const i18n = {
         subtitle: "Windows Web 控制器",
         master_vol: "主音量",
         apps_title: "应用音量",
+        media_title: "播放控制",
         loading: "正在读取音频应用...",
         empty: "当前没有发声的应用",
         langToggle: "EN"
@@ -24,6 +25,7 @@ const i18n = {
         subtitle: "Windows Web Controller",
         master_vol: "Master Volume",
         apps_title: "Applications",
+        media_title: "Playback",
         loading: "Loading audio sessions...",
         empty: "No active audio applications found.",
         langToggle: "中"
@@ -74,6 +76,7 @@ async function init() {
     renderMaster();
     renderSessions();
     setupEventListeners();
+    setupMediaEventListeners();
     
     // Poll loop
     setInterval(async () => {
@@ -273,6 +276,24 @@ function setupEventListeners() {
         state.master.mute = newMute;
         renderMaster();
         await fetch(`/api/master/volume?mute=${newMute}`, { method: 'POST' });
+    });
+}
+
+function setupMediaEventListeners() {
+    const prevBtn = document.getElementById('media-prev');
+    const playPauseBtn = document.getElementById('media-play-pause');
+    const nextBtn = document.getElementById('media-next');
+
+    prevBtn?.addEventListener('click', () => {
+        fetch('/api/media?action=prev', { method: 'POST' }).catch(console.error);
+    });
+
+    playPauseBtn?.addEventListener('click', () => {
+        fetch('/api/media?action=play_pause', { method: 'POST' }).catch(console.error);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+        fetch('/api/media?action=next', { method: 'POST' }).catch(console.error);
     });
 }
 

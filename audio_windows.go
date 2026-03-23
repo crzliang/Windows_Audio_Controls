@@ -14,6 +14,18 @@ import (
 	"golang.org/x/sys/windows"
 )
 
+const (
+	VK_MEDIA_NEXT_TRACK byte = 0xB0
+	VK_MEDIA_PREV_TRACK byte = 0xB1
+	VK_MEDIA_STOP       byte = 0xB2
+	VK_MEDIA_PLAY_PAUSE byte = 0xB3
+)
+
+var (
+	moduser32       = windows.NewLazySystemDLL("user32.dll")
+	procKeybdEvent  = moduser32.NewProc("keybd_event")
+)
+
 type AudioSession struct {
 	PID    uint32  `json:"pid"`
 	Name   string  `json:"name"`
@@ -283,4 +295,10 @@ func setAudioSessionVolume(pid uint32, level float32, mute *bool) error {
 	}
 
 	return fmt.Errorf("session not found")
+}
+
+func sendMediaKey(key byte) {
+	const KEYEVENTF_KEYUP = 0x0002
+	procKeybdEvent.Call(uintptr(key), 0, 0, 0)
+	procKeybdEvent.Call(uintptr(key), 0, KEYEVENTF_KEYUP, 0)
 }
