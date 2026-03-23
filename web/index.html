@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">音量控制</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <button id="lang-btn" class="lang-btn">EN</button>
+            </div>
+            <h1 data-i18n="header">音频控制</h1>
+            <p class="subtitle" data-i18n="subtitle">Windows Web 控制器</p>
+        </header>
+
+        <section class="master-control glass-panel">
+            <div class="header-row">
+                <h2 data-i18n="master_vol">主音量</h2>
+                <button id="master-mute-btn" class="icon-btn" aria-label="Mute">
+                    <svg id="master-icon-vol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                    <svg id="master-icon-mute" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                </button>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="master-slider" min="0" max="100" value="50" class="slider master-slider">
+                <span id="master-val" class="val-text">50%</span>
+            </div>
+        </section>
+
+        <h3 class="section-title" data-i18n="apps_title">应用音量</h3>
+        <div id="sessions-container" class="sessions-list">
+            <div class="loading-state" data-i18n="loading">正在读取音频应用...</div>
+        </div>
+    </div>
+
+    <!-- Template for a session card -->
+    <template id="session-template">
+        <div class="session-card glass-panel">
+            <div class="session-info">
+                <div class="app-icon"></div>
+                <div class="app-details">
+                    <h4 class="app-name"></h4>
+                    <p class="app-pid"></p>
+                </div>
+                <button class="icon-btn mute-btn" aria-label="Mute">
+                    <svg class="icon-vol" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <svg class="icon-mute" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                </button>
+            </div>
+            <div class="slider-container session-slider-container">
+                <input type="range" min="0" max="100" value="50" class="slider app-slider">
+                <span class="val-text app-val-text">50%</span>
+            </div>
+        </div>
+    </template>
+
+    <script src="app.js"></script>
+</body>
+</html>
