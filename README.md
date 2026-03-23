@@ -2,6 +2,18 @@
 
 这是一款轻量级、完全无坑、**零依赖**的 Windows 音量控制器。你可以通过手机或局域网内的任何其他设备，在一个美观的现代网页中远程控制 Windows 电脑的“主音量”以及“各个独立应用（如游戏、浏览器、音乐播放器）的音量”。
 
+## 📸 运行效果
+
+由于基于自适应 Web 技术开发，无论是在宽屏的电脑浏览器，还是在竖屏的智能手机上，界面都会自动完美适配。
+
+<div align="center">
+  <img src="docs/images/pc.png" alt="电脑端控制效果" width="600" />
+</div>
+
+<div align="center" style="display:flex; justify-content:center; gap: 20px;">
+  <img src="docs/images/mobile.png" alt="手机端触屏控制效果" width="300" />
+</div>
+
 ## 🚀 如何使用？
 
 1. 前往 GitHub 的 [Releases](../../releases) 页面下载最新的 `.zip` 压缩包。
