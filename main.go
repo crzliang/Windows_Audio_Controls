@@ -12,7 +12,7 @@ import (
 	"github.com/getlantern/systray"
 )
 
-//go:embed web/* icon.ico
+//go:embed web/* assets/icon.ico
 var embeddedFiles embed.FS
 
 type StatusResponse struct {
@@ -30,7 +30,7 @@ func onExit() {
 }
 
 func onReady() {
-	iconData, err := embeddedFiles.ReadFile("icon.ico")
+	iconData, err := embeddedFiles.ReadFile("assets/icon.ico")
 	if err == nil {
 		systray.SetIcon(iconData)
 	}
