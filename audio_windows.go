@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
+	"os/exec"
+	"encoding/json"
 	"unsafe"
 
 	"github.com/go-ole/go-ole"
@@ -301,4 +303,41 @@ func sendMediaKey(key byte) {
 	const KEYEVENTF_KEYUP = 0x0002
 	procKeybdEvent.Call(uintptr(key), 0, 0, 0)
 	procKeybdEvent.Call(uintptr(key), 0, KEYEVENTF_KEYUP, 0)
+}
+
+func getMediaInfo() *MediaInfo {
+	psScript := `
+	$ErrorActionPreference = 'SilentlyContinue';
+	Add-Type -AssemblyName System.Runtime.WindowsRuntime;
+	$mgr = [Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager, Windows.Media.Control, ContentType=WindowsRuntime]::RequestAsync().GetResults();
+	$session = $mgr.GetCurrentSession();
+	if ($session) {
+		try {
+			$props = $session.TryGetMediaPropertiesAsync().GetResults();
+			$playback = $session.GetPlaybackInfo();
+			$res = @{
+				'title' = $props.Title;
+				'artist' = $props.Artist;
+				'status' = $playback.PlaybackStatus;
+			};
+			$res | ConvertTo-Json;
+		} catch {}
+	}
+	`
+	cmd := exec.Command("powershell", "-NoProfile", "-Command", psScript)
+	out, err := cmd.Output()
+	if err != nil {
+		return nil
+	}
+
+	if len(strings.TrimSpace(string(out))) == 0 {
+		return nil
+	}
+
+	var info MediaInfo
+	if err := json.Unmarshal(out, &info); err != nil {
+		return nil
+	}
+
+	return &info
 }

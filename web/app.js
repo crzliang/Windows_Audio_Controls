@@ -4,6 +4,7 @@ let updateTimer = null;
 
 const state = {
     master: { vol: 50, mute: false },
+    media: { title: '', artist: '', isPlaying: false },
     sessions: [] // { pid, name, volume, mute }
 };
 
@@ -84,6 +85,7 @@ async function init() {
             const sessionsChanged = await fetchStatus();
             if(!isInteracting) {
                 renderMaster();
+                renderMedia();
                 if(sessionsChanged) {
                     renderSessions();
                 } else {
@@ -103,6 +105,16 @@ async function fetchStatus() {
         state.master.vol = Math.round(data.masterVolume * 100);
         state.master.mute = data.masterMute;
         
+        if (data.media) {
+            state.media.title = data.media.title || '';
+            state.media.artist = data.media.artist || '';
+            state.media.isPlaying = data.media.status === 'Playing' || data.media.status === 4; // 4 is Playing in WinRT PlaybackStatus
+        } else {
+            state.media.title = '';
+            state.media.artist = '';
+            state.media.isPlaying = false;
+        }
+
         let changed = false;
         if (state.sessions.length !== data.sessions.length) changed = true;
         
@@ -140,6 +152,31 @@ async function fetchStatus() {
     } catch (e) {
         console.error("Fetch status failed:", e);
         return false;
+    }
+}
+
+function renderMedia() {
+    const infoContainer = document.getElementById('media-info');
+    const titleEl = document.getElementById('media-title');
+    const artistEl = document.getElementById('media-artist');
+    const playPauseBtn = document.getElementById('media-play-pause');
+    const playIcon = playPauseBtn.querySelector('.play-icon');
+    const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+
+    if (state.media.title) {
+        infoContainer.style.display = 'block';
+        titleEl.innerText = state.media.title;
+        artistEl.innerText = state.media.artist;
+    } else {
+        infoContainer.style.display = 'none';
+    }
+
+    if (state.media.isPlaying) {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'flex';
+    } else {
+        playIcon.style.display = 'flex';
+        pauseIcon.style.display = 'none';
     }
 }
 

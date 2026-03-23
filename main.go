@@ -19,6 +19,13 @@ type StatusResponse struct {
 	MasterVolume float32        `json:"masterVolume"`
 	MasterMute   bool           `json:"masterMute"`
 	Sessions     []AudioSession `json:"sessions"`
+	Media        *MediaInfo     `json:"media"`
+}
+
+type MediaInfo struct {
+	Title  string      `json:"title"`
+	Artist string      `json:"artist"`
+	Status interface{} `json:"status"`
 }
 
 func main() {
@@ -88,11 +95,14 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 		sessions = []AudioSession{}
 	}
 
+	mediaInfo := getMediaInfo()
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(StatusResponse{
 		MasterVolume: masterLevel,
 		MasterMute:   masterMute,
 		Sessions:     sessions,
+		Media:        mediaInfo,
 	})
 }
 

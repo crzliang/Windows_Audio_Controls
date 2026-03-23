@@ -42,3 +42,11 @@ func setAudioSessionVolume(pid uint32, level float32, mute *bool) error {
 func sendMediaKey(key byte) {
 	fmt.Printf("STUB: sendMediaKey 0x%X\n", key)
 }
+
+func getMediaInfo() *MediaInfo {
+	return &MediaInfo{
+		Title:  "Stub Song",
+		Artist: "Stub Artist",
+		Status: "Playing",
+	}
+}
