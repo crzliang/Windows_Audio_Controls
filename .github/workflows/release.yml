@@ -11,6 +11,8 @@ jobs:
   build-and-release:
     name: Build Windows Binaries
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout Code
