@@ -45,8 +45,6 @@ func sendMediaKey(key byte) {
 
 func getMediaInfo() *MediaInfo {
 	return &MediaInfo{
-		Title:  "Stub Song",
-		Artist: "Stub Artist",
 		Status: "Playing",
 	}
 }

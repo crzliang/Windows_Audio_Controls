@@ -283,28 +283,6 @@ h1 {
     gap: 20px;
 }
 
-.media-info-display {
-    text-align: center;
-    width: 100%;
-    margin-bottom: 4px;
-}
-
-.media-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1e293b;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.media-artist {
-    font-size: 14px;
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
 .media-btns {
     display: flex;
     justify-content: center;

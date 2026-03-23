@@ -23,8 +23,6 @@ type StatusResponse struct {
 }
 
 type MediaInfo struct {
-	Title  string      `json:"title"`
-	Artist string      `json:"artist"`
 	Status interface{} `json:"status"`
 }
 

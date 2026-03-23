@@ -4,7 +4,7 @@ let updateTimer = null;
 
 const state = {
     master: { vol: 50, mute: false },
-    media: { title: '', artist: '', isPlaying: false },
+    media: { isPlaying: false },
     sessions: [] // { pid, name, volume, mute }
 };
 
@@ -106,12 +106,8 @@ async function fetchStatus() {
         state.master.mute = data.masterMute;
         
         if (data.media) {
-            state.media.title = data.media.title || '';
-            state.media.artist = data.media.artist || '';
-            state.media.isPlaying = data.media.status === 'Playing' || data.media.status === 4; // 4 is Playing in WinRT PlaybackStatus
+            state.media.isPlaying = data.media.status === 'Playing' || data.media.status === 4;
         } else {
-            state.media.title = '';
-            state.media.artist = '';
             state.media.isPlaying = false;
         }
 
@@ -156,20 +152,9 @@ async function fetchStatus() {
 }
 
 function renderMedia() {
-    const infoContainer = document.getElementById('media-info');
-    const titleEl = document.getElementById('media-title');
-    const artistEl = document.getElementById('media-artist');
     const playPauseBtn = document.getElementById('media-play-pause');
     const playIcon = playPauseBtn.querySelector('.play-icon');
     const pauseIcon = playPauseBtn.querySelector('.pause-icon');
-
-    if (state.media.title) {
-        infoContainer.style.display = 'block';
-        titleEl.innerText = state.media.title;
-        artistEl.innerText = state.media.artist;
-    } else {
-        infoContainer.style.display = 'none';
-    }
 
     if (state.media.isPlaying) {
         playIcon.style.display = 'none';

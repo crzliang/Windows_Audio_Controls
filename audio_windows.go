@@ -313,11 +313,8 @@ func getMediaInfo() *MediaInfo {
 	$session = $mgr.GetCurrentSession();
 	if ($session) {
 		try {
-			$props = $session.TryGetMediaPropertiesAsync().GetResults();
 			$playback = $session.GetPlaybackInfo();
 			$res = @{
-				'title' = $props.Title;
-				'artist' = $props.Artist;
 				'status' = $playback.PlaybackStatus;
 			};
 			$res | ConvertTo-Json;
