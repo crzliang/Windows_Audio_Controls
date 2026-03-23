@@ -1,0 +1,57 @@
+name: Build and Release
+
+on:
+  push:
+    # 只在推送 v 开头的 tag 时触发（例如：git tag v1.0.0 && git push --tags）
+    tags:
+      - 'v*'
+  workflow_dispatch: # 允许你在 GitHub 网页端手动点击运行
+
+jobs:
+  build-and-release:
+    name: Build Windows Binaries
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          
+      - name: Download Dependencies
+        run: go mod tidy
+
+      - name: Build Standard Version (winvol.exe)
+        env:
+          GOOS: windows
+          GOARCH: amd64
+          CGO_ENABLED: 0
+        run: go build -v -o winvol.exe .
+        
+      - name: Build Background Version (winvol_bg.exe)
+        env:
+          GOOS: windows
+          GOARCH: amd64
+          CGO_ENABLED: 0
+        run: go build -v -ldflags "-H windowsgui" -o winvol_bg.exe .
+        
+      - name: Create Release Zip Archive
+        run: zip windows-audio-controller-${{ github.ref_name }}.zip winvol.exe winvol_bg.exe build.bat
+        
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            winvol.exe
+            winvol_bg.exe
+            windows-audio-controller-${{ github.ref_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
